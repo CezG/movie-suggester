@@ -1,28 +1,51 @@
 import groupMovies from "./groupMovies.json";
 
 const searchMovies = () => {
-    let mainPerson = groupMovies.groupMovies[0];
-    let mainPersonMovies = mainPerson.movies.map(movie =>movie.movieTitle);
-    let restGroup = groupMovies.groupMovies.slice(1);
+  const mainPerson = groupMovies.groupMovies[0].movies.map((movie, id) => {
+    return { movieId: id, title: movie.movieTitle, score: movie.score };
+  });
+  let mainPersonMovies = mainPerson.map((movie) => movie.title);
 
-    let group= restGroup.map((group)=> group.movies);
-    let moviesGroup =group.map(moviesPerson=> moviesPerson.map(movie =>movie.movieTitle));
-    
-    let booleanTable= moviesGroup.map( (person )=> person.map((movie, index )=> mainPersonMovies.includes(movie)));
-   
-    let personsAndMovies = booleanTable.map((movies, index )=> 
-        {return {"personId":index, "movies": movies.map((movie,index)=> 
-        {return{"movieId":index,"movie": movie}}).filter(movie=> movie.movie ) } }); 
-    
-    return personsAndMovies;
+  let restGroup = groupMovies.groupMovies.slice(1);
+  let group = restGroup.map((group) => group.movies);
+  const moviesGroup = group.map((moviesPerson, id) => {
+    return {
+      personId: id,
+      movies: moviesPerson.map((movie, id) => {
+        return {
+          movieId: id,
+          title: movie.movieTitle,
+          score: movie.score,
+        };
+      }),
+    };
+  });
 
-}
+  let matchedMovies = moviesGroup
+    .map((group, id) => {
+      return {
+        ...group,
+        movies: group.movies.filter((movie) =>
+          mainPersonMovies.includes(movie.title)
+        ),
+      };
+    })
+    .filter((arrays) => arrays.movies.length);
 
+  let cos3 = matchedMovies.map((moviesPerson) => ({
+    personId: moviesPerson.personId,
+    movies: moviesPerson.movies.map((movie) => ({
+      ...movie,
+      delta:
+        parseInt(
+          mainPerson.find((mainMovie) =>
+            mainMovie.title === movie.title ? mainMovie.score : ""
+          ).score
+        ) - movie.score,
+    })),
+  }));
 
-const check = (booleanTable,index ) =>{
-    
-  
-
-}
+  return cos3;
+};
 
 export default searchMovies;
