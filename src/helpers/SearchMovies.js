@@ -4,10 +4,10 @@ const searchMovies = () => {
   const mainPerson = groupMovies.groupMovies[0].movies.map((movie, id) => {
     return { movieId: id, title: movie.movieTitle, score: movie.score };
   });
-  let mainPersonMovies = mainPerson.map((movie) => movie.title);
+  const mainPersonMovies = mainPerson.map((movie) => movie.title);
 
-  let restGroup = groupMovies.groupMovies.slice(1);
-  let group = restGroup.map((group) => group.movies);
+  const restGroup = groupMovies.groupMovies.slice(1);
+  const group = restGroup.map((group) => group.movies);
   const moviesGroup = group.map((moviesPerson, id) => {
     return {
       personId: id,
@@ -21,7 +21,7 @@ const searchMovies = () => {
     };
   });
 
-  let matchedMovies = moviesGroup
+  const matchedMovies = moviesGroup
     .map((group, id) => {
       return {
         ...group,
@@ -32,20 +32,34 @@ const searchMovies = () => {
     })
     .filter((arrays) => arrays.movies.length);
 
-  let cos3 = matchedMovies.map((moviesPerson) => ({
+  const matchedMoviesWithDelta = matchedMovies.map((moviesPerson) => ({
     personId: moviesPerson.personId,
     movies: moviesPerson.movies.map((movie) => ({
       ...movie,
-      delta:
+      delta: Math.abs(
         parseInt(
           mainPerson.find((mainMovie) =>
             mainMovie.title === movie.title ? mainMovie.score : ""
           ).score
-        ) - movie.score,
+        ) - movie.score
+      ),
     })),
   }));
 
-  return cos3;
+  const sum = (deltas) => {
+    return deltas.reduce((a, b) => a + b, 0);
+  };
+
+  const calculateMatchPerons = matchedMoviesWithDelta.map((moviesPerson) => ({
+    ...moviesPerson,
+    sum: sum(moviesPerson.movies.map((score) => score.delta)),
+    similiarMovies: moviesPerson.movies.length,
+    average:
+      sum(moviesPerson.movies.map((score) => score.delta)) /
+      moviesPerson.movies.length,
+  }));
+
+  return { calculateMatchPerons, matchedMoviesWithDelta };
 };
 
 export default searchMovies;
