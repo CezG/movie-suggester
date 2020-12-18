@@ -22,7 +22,7 @@ const searchMovies = () => {
   });
 
   const matchedMovies = moviesGroup
-    .map((group, id) => {
+    .map((group) => {
       return {
         ...group,
         movies: group.movies.filter((movie) =>
