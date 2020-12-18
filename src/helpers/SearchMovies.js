@@ -59,7 +59,34 @@ const searchMovies = () => {
       moviesPerson.movies.length,
   }));
 
-  return { calculateMatchPerons, matchedMoviesWithDelta };
+  const mostSimiliarPersons = calculateMatchPerons.filter(
+    (person) => person.average <= 1.45 && person.similiarMovies >= 3
+  );
+
+  const mostSimiliarPersonsId = mostSimiliarPersons.map(
+    (person) => person.personId
+  );
+
+  const bestMoviesSimiliarPersons = moviesGroup
+    .filter((person) => mostSimiliarPersonsId.includes(person.personId))
+    .map((person) => ({
+      ...person,
+      movies: person.movies.filter(
+        (movie) => !mainPersonMovies.includes(movie.title) && movie.score >= 9
+      ),
+    }));
+
+  const bestMoviesArrays = bestMoviesSimiliarPersons.map((person) =>
+    person.movies.map((movie) => movie.title)
+  );
+
+  const bestMoviesArray = [].concat.apply([], bestMoviesArrays).sort();
+
+  let bestMoviesWithoutDuplicates = [...new Set(bestMoviesArray)];
+
+  return {
+    bestMoviesWithoutDuplicates,
+  };
 };
 
 export default searchMovies;
