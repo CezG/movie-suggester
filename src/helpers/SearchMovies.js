@@ -1,3 +1,11 @@
+/**
+ *  @fileOverview Searching movies by score ranges
+ *
+ *  @author       Cezary Gulba
+ *
+ *  @requires     JSON:groupMovies
+ *  @requires     ./groupMovies.json
+ */
 import groupMovies from "./groupMovies.json";
 
 const searchMovies = () => {

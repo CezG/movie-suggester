@@ -1,3 +1,12 @@
+/**
+ *  @fileOverview Searching movies by similar scores
+ *
+ *  @author       Wojciech Podciborski
+ *
+ *  @requires     JSON:groupMovies
+ *  @requires     ./groupMovies.json
+ */
+
 import { groupMovies } from "./groupMovies.json";
 
 const FindBySimilarPersons = () => {
