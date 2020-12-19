@@ -109,6 +109,7 @@ const searchMovies = () => {
 
   let worstMoviesWithoutDuplicates = [...new Set(worstMoviesArray)];
 
+  console.log("Filmy, których lepiej nie oglądać:");
   console.log(worstMoviesWithoutDuplicates);
   return {
     bestMoviesWithoutDuplicates,
