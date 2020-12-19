@@ -84,16 +84,35 @@ const searchMovies = () => {
       ),
     }));
 
+  const worstMoviesSimiliarPersons = moviesGroup
+    .filter((person) => mostSimiliarPersonsId.includes(person.personId))
+    .map((person) => ({
+      ...person,
+      movies: person.movies.filter(
+        (movie) => !mainPersonMovies.includes(movie.title) && movie.score < 2
+      ),
+    }));
+
   const bestMoviesArrays = bestMoviesSimiliarPersons.map((person) =>
+    person.movies.map((movie) => movie.title)
+  );
+
+  const worstMoviesArrays = worstMoviesSimiliarPersons.map((person) =>
     person.movies.map((movie) => movie.title)
   );
 
   const bestMoviesArray = [].concat.apply([], bestMoviesArrays).sort();
 
+  const worstMoviesArray = [].concat.apply([], worstMoviesArrays).sort();
+
   let bestMoviesWithoutDuplicates = [...new Set(bestMoviesArray)];
 
+  let worstMoviesWithoutDuplicates = [...new Set(worstMoviesArray)];
+
+  console.log(worstMoviesWithoutDuplicates);
   return {
     bestMoviesWithoutDuplicates,
+    worstMoviesWithoutDuplicates,
   };
 };
 
